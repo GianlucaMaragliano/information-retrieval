@@ -18,7 +18,16 @@ class ScienceExperimentsSpider(scrapy.Spider):
 
         # for experiment in response.xpath("//div[@class='search-result search-result-grid page-break-avoid']"):
         experiment = response.xpath("//div[@class='search-result search-result-grid page-break-avoid']")[0]
-        yield {
-            "titles": experiment.xpath("//span[@class='title-name']/text()").getall(),
-            # "link": experiment.xpath(".//a/@href"),
+        
+        titles_span = experiment.xpath("//span[@class='title-name']/text()").getall()
+        titles_a = experiment.xpath("//div[@class='search-title']/a/text()").getall()
+
+        for t in titles_span + titles_a:
+            yield   {
+                "title": t,
             }
+
+        next_page = response.xpath("//div[@class='search-result pager only-screen']/a[@class='pager_button']/@href").get()
+
+        if next_page:
+            yield response.follow(next_page, callback=self.parse)
