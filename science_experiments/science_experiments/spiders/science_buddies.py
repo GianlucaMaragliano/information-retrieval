@@ -5,7 +5,7 @@ from scrapy.http import Response
 
 # eval "$(/home/gianluca/anaconda3/bin/conda shell.bash hook)"
 # conda activate scrapy_env
-# scrapy crawl science_experiments -o science_experiments.json
+# scrapy crawl science_buddies -o science_experiments.json
 
 class ScienceBuddiesSpider(scrapy.Spider):
 

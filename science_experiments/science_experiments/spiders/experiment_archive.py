@@ -2,6 +2,8 @@ from typing import Any
 import scrapy
 from scrapy.http import Response
 
+# scrapy crawl experiment_archive -o experiment_archive.jsonl
+
 class experimentArchiveSpider(scrapy.Spider):
     name = "experiment_archive"
 
