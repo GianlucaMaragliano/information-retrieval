@@ -1,103 +1,102 @@
-# Define here the models for your spider middleware
-#
-# See documentation in:
-# https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+# Author: Marco Biasion <marco.biasion@usi.ch>
 
-from scrapy import signals
+import ipaddress
+from typing import Optional
+import scrapy
+import scrapy.signals
+import scrapy.http
+from urllib.parse import urlparse
+import os
+import os.path
 
-# useful for handling different item types with a single interface
-from itemadapter import is_item, ItemAdapter
 
+class CacheMiddleware:
+    _local_cache_path = 'cache'
+    _local_host = ipaddress.IPv4Address('127.0.0.1')
 
-class ScienceExperimentsSpiderMiddleware:
-    # Not all methods need to be defined. If a method is not defined,
-    # scrapy acts as if the spider middleware does not modify the
-    # passed objects.
+    @classmethod
+    def local_path(cls, url) -> str:
+        url = urlparse(url)
+
+        site_path = '/'.join(url.netloc.split('.')[::-1])
+        insite_path = url.path.strip('/')
+        query = f'?{url.query}' if url.query else ''
+        return f'{cls._local_cache_path}/{site_path}/-/{insite_path}{query}'
 
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
         s = cls()
-        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
+        crawler.signals.connect(s.spider_opened, signal=scrapy.signals.spider_opened)
         return s
 
-    def process_spider_input(self, response, spider):
-        # Called for each response that goes through the spider
-        # middleware and into the spider.
+    def process_request(self,
+                        request: scrapy.http.Request,
+                        spider: scrapy.Spider) -> Optional[scrapy.http.TextResponse]:
+        """Load the response locally if it was cached.
 
-        # Should return None or raise an exception.
-        return None
+        Args:
+            request (Request): The original request.
+            spider (Spider): The spider managing the crawling.
 
-    def process_spider_output(self, response, result, spider):
-        # Called with the results returned from the Spider, after
-        # it has processed the response.
+        Returns:
+            Optional(TextResponse): The response if the page response was cached.
+        """
 
-        # Must return an iterable of Request, or item objects.
-        for i in result:
-            yield i
+        file_path = self.local_path(request.url)
 
-    def process_spider_exception(self, response, exception, spider):
-        # Called when a spider or process_spider_input() method
-        # (from other spider middleware) raises an exception.
+        # check if response is cached
+        if not os.path.isfile(file_path):
+            return None
 
-        # Should return either None or an iterable of Request or item objects.
-        pass
+        # read file
+        with open(file_path, 'r') as f:
+            body = f.read()
 
-    def process_start_requests(self, start_requests, spider):
-        # Called with the start requests of the spider, and works
-        # similarly to the process_spider_output() method, except
-        # that it doesn’t have a response associated.
+        # return cached response
+        return scrapy.http.TextResponse(
+            url=request.url,
+            status=200,
+            headers=None,
+            body=body,
+            encoding='utf-8',
+            flags=None,
+            request=request,
+            certificate=None,
+            ip_address=self._local_host,
+            protocol=None
+        )
 
-        # Must return only requests (not items).
-        for r in start_requests:
-            yield r
+    def process_response(self,
+                         request: scrapy.http.Request,
+                         response: scrapy.http.TextResponse,
+                         spider: scrapy.Spider) -> scrapy.http.TextResponse:
+        """Save the response body if it came from a server.
 
-    def spider_opened(self, spider):
-        spider.logger.info("Spider opened: %s" % spider.name)
+        Args:
+            request (Request): The original request.
+            response (Response): The response to possibly save.
+            spider (Spider): The spider managing the crawling.
 
+        Returns:
+            TextResponse: The response as it was given to the function.
+        """
 
-class ScienceExperimentsDownloaderMiddleware:
-    # Not all methods need to be defined. If a method is not defined,
-    # scrapy acts as if the downloader middleware does not modify the
-    # passed objects.
+        # response is coming from the cache, skip
+        if response.ip_address == self._local_host:
+            return response
 
-    @classmethod
-    def from_crawler(cls, crawler):
-        # This method is used by Scrapy to create your spiders.
-        s = cls()
-        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
-        return s
+        file_path = self.local_path(request.url)
 
-    def process_request(self, request, spider):
-        # Called for each request that goes through the downloader
-        # middleware.
+        # create folder/s (if missing)
+        folder_path, file_name = file_path.rsplit('/', 1)
+        os.makedirs(folder_path, exist_ok=True)
 
-        # Must either:
-        # - return None: continue processing this request
-        # - or return a Response object
-        # - or return a Request object
-        # - or raise IgnoreRequest: process_exception() methods of
-        #   installed downloader middleware will be called
-        return None
+        # write file
+        with open(file_path, 'w') as f:
+            f.write(response.text)
 
-    def process_response(self, request, response, spider):
-        # Called with the response returned from the downloader.
-
-        # Must either;
-        # - return a Response object
-        # - return a Request object
-        # - or raise IgnoreRequest
         return response
 
-    def process_exception(self, request, exception, spider):
-        # Called when a download handler or a process_request()
-        # (from other downloader middleware) raises an exception.
-
-        # Must either:
-        # - return None: continue processing this exception
-        # - return a Response object: stops process_exception() chain
-        # - return a Request object: stops process_exception() chain
-        pass
-
     def spider_opened(self, spider):
-        spider.logger.info("Spider opened: %s" % spider.name)
+        spider.logger.info(f'Spider opened: {spider.name}')
