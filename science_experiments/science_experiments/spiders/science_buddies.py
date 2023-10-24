@@ -7,11 +7,12 @@ from scrapy.http import Response
 # conda activate scrapy_env
 # scrapy crawl science_experiments -o science_experiments.json
 
-class ScienceExperimentsSpider(scrapy.Spider):
+class ScienceBuddiesSpider(scrapy.Spider):
 
-    name = 'science_experiments'
+    name = 'science_buddies'
 
     start_urls = ["https://www.sciencebuddies.org/science-experiments?p=1"]
+    # https://stevespangler.com/experiments/
 
     def parse(self, response: Response):
 
@@ -27,7 +28,7 @@ class ScienceExperimentsSpider(scrapy.Spider):
                 "title": t,
             }
 
-        next_page = response.xpath("//div[@class='search-result pager only-screen']/a[@class='pager_button']/@href").get()
+        # next_page = response.xpath("//a[@class='pager only-screen']/@nth-child(last())/@href").get()
 
-        if next_page:
-            yield response.follow(next_page, callback=self.parse)
+        # if next_page:
+        #     yield response.follow(next_page, callback=self.parse)
