@@ -11,13 +11,17 @@ class experimentArchiveSpider(scrapy.Spider):
 
     def parse(self, response: Response):
 
+        base_url = "https://www.experimentarchive.com"
+
         for experiment in response.xpath("//div[@class='polaroidcontainer']"):
             title = experiment.xpath(".//h2[@class='polaroidrubrik']/text()").get()
-            type = experiment.xpath(".//div[@class='polaroidkategori']/text()").get()
+            subject = experiment.xpath(".//div[@class='polaroidkategori']/text()").get()
             description = experiment.xpath(".//div[@class='polaroidingress']/text()").get()
+            link = experiment.xpath(".//div[@class='polaroidcontainer_inre']/a/@href").get()
 
             yield {
                 "title": title,
-                "type": type,
+                "subject": subject,
                 "description": description,
+                "link": base_url + link
             }
