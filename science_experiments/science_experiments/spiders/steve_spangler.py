@@ -1,6 +1,7 @@
-from typing import Any
 import scrapy
 from scrapy.http import Response
+
+# scrapy crawl steve_spangler -o steve_spangler.json
 
 class steveSpanglerSpider(scrapy.Spider):
     name = "steve_spangler"
@@ -17,13 +18,21 @@ class steveSpanglerSpider(scrapy.Spider):
             description = experiment.xpath(".//div[@class='text']/p/text()").get()
             link = experiment.xpath(".//div[@class='text']/div/a[@class='wp-block-button__link']/@href").get()
 
-            yield {
-                "title": title,
-                "description": description,
-                "link": base_url+link,
-            }
+            if link:
+                yield scrapy.Request(url=base_url + link, callback=self.parse_explanation, cb_kwargs=dict(title=title, description=description))
 
             next_page = response.xpath("//a[@class='nextpostslink']/@href").get()
 
             if next_page:
                 yield response.follow(url=next_page, callback=self.parse)
+
+    def parse_explanation(self, response: Response, title, description):
+        
+        explanation = response.xpath("//div[@class='text']/p/text()").get()
+
+        yield {
+            "title": title,
+            "description": description,
+            "link": response.url,
+            "explanation": explanation,
+        }
