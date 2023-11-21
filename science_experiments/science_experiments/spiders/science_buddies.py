@@ -1,5 +1,6 @@
 from typing import Any
 import scrapy
+import re
 from scrapy.http import Response
 
 
@@ -16,17 +17,42 @@ class ScienceBuddiesSpider(scrapy.Spider):
 
     def parse(self, response: Response):
 
+        base_url = "https://www.sciencebuddies.org"
 
-        # for experiment in response.xpath("//div[@class='search-result search-result-grid page-break-avoid']"):
-        experiment = response.xpath("//div[@class='search-result search-result-grid page-break-avoid']")[0]
+        experiment = response.xpath("//div[@class='search-result search-result-grid page-break-avoid']")
+        links = experiment.xpath(".//div[@class='search-title']/a/@href").extract()
+        for link in links:
+            if link:
+                yield scrapy.Request(url=base_url + link, callback=self.parse_experiment)
+
+    def parse_experiment(self, response: Response):
+        title = response.xpath('.//div[@class="main-title"]/div[@class="main-title-left"]/h1/span[@class="title-name"]/text()').get()
+        if not title:
+            title = response.xpath('.//div[@class="main-title"]/div[@class="main-title-left"]/h1/text()').get()
+
+        subject = response.xpath('.//div[@class="page-break-avoid"]/div[@class="summary"]/div[@class="summary-left"]/div[@class="pi-summary-content"]/a/span[@class="title-name"]/text()').get()
+        if not subject:
+            subject = ""
         
-        titles_span = experiment.xpath("//span[@class='title-name']/text()").getall()
-        titles_a = experiment.xpath("//div[@class='search-title']/a/text()").getall()
+        target_h2 = response.xpath(f"//h2[@id='introduction']")
+        if target_h2:
+            explanation = target_h2.xpath('following-sibling::*[following::h3]').extract()
 
-        for t in titles_span + titles_a:
-            yield   {
-                "title": t,
-            }
+        clean_explanation = ""
+        if explanation:
+            for content in explanation:
+                clean_text = re.sub('<[^<]+?>', '', content)
+                clean_text = clean_text.replace('\r', '').replace('\n', '')
+                clean_explanation += clean_text
+
+        yield {
+            "title": title, 
+            "subject": subject,
+            "link": response.url,
+            "explanation": clean_explanation, 
+        }
+
+
 
         # next_page = response.xpath("//a[@class='pager only-screen']/@nth-child(last())/@href").get()
 
