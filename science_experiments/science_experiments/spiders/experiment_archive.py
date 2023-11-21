@@ -38,7 +38,7 @@ class experimentArchiveSpider(scrapy.Spider):
         if explanation:
             for content in explanation:
                 clean_text = re.sub('<[^<]+?>', '', content)
-                clean_text = clean_text.replace('\r', '').replace('\n', '')
+                clean_text = clean_text.replace('\r', ' ').replace('\n', ' ')
                 clean_explanation += clean_text
 
 
