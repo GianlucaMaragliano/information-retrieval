@@ -20,10 +20,18 @@ class ScienceBuddiesSpider(scrapy.Spider):
         base_url = "https://www.sciencebuddies.org"
 
         experiment = response.xpath("//div[@class='search-result search-result-grid page-break-avoid']")
+        
         links = experiment.xpath(".//div[@class='search-title']/a/@href").extract()
         for link in links:
             if link:
                 yield scrapy.Request(url=base_url + link, callback=self.parse_experiment)
+
+        next_page = response.xpath(".//div[@class='pager only-screen']/a[@class='pager-button'][contains(., '>')]")
+        if next_page:
+            next_page_url = next_page.xpath('@href').extract_first()
+            if next_page_url:
+                yield response.follow(url=next_page_url, callback=self.parse)
+
 
     def parse_experiment(self, response: Response):
         title = response.xpath('.//div[@class="main-title"]/div[@class="main-title-left"]/h1/span[@class="title-name"]/text()').get()
@@ -34,10 +42,13 @@ class ScienceBuddiesSpider(scrapy.Spider):
         if not subject:
             subject = ""
         
-        target_h2 = response.xpath(f"//h2[@id='introduction']")
-        if target_h2:
-            explanation = target_h2.xpath('following-sibling::*[following::h3]').extract()
-            # TODO explanation is getting too much content, reduce it up to Term and Concept
+        target_explanation = response.xpath("//h2[@id='introduction']")
+        explanation = ""
+        if target_explanation:
+            next_h3 = target_explanation.xpath('following::h3[1][contains(.,"Terms and Concepts")]')
+            if next_h3:
+                explanation = target_explanation.xpath('following-sibling::*[following::h3[1][contains(.,"Terms and Concepts")]]').extract()
+
 
         clean_explanation = ""
         if explanation:
@@ -47,18 +58,24 @@ class ScienceBuddiesSpider(scrapy.Spider):
                 clean_explanation += clean_text
 
 
-        # TODO parse description after <h1\2> abstract </h2> //*[@id="abstract"]
+        target_description = response.xpath("//h2[@id='abstract']")
+        description = ""
+        if target_description:
+            next_h3 = target_description.xpath('following::h2[1]')
+            if next_h3:
+                description = target_description.xpath('following-sibling::*[following::h2[@id="summary"]]').extract()
+
+        clean_description = ""
+        if description:
+            for content in description:
+                clean_text = re.sub('<[^<]+?>', '', content)
+                clean_text = clean_text.replace('\r', '').replace('\n', '')
+                clean_description += clean_text
 
         yield {
             "title": title, 
             "subject": subject,
             "link": response.url,
+            "description": clean_description,
             "explanation": clean_explanation, 
         }
-
-
-
-        # next_page = response.xpath("//a[@class='pager only-screen']/@nth-child(last())/@href").get()
-
-        # if next_page:
-        #     yield response.follow(next_page, callback=self.parse)
