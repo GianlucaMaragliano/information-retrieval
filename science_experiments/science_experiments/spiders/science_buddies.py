@@ -37,6 +37,7 @@ class ScienceBuddiesSpider(scrapy.Spider):
         target_h2 = response.xpath(f"//h2[@id='introduction']")
         if target_h2:
             explanation = target_h2.xpath('following-sibling::*[following::h3]').extract()
+            # TODO explanation is getting too much content, reduce it up to Term and Concept
 
         clean_explanation = ""
         if explanation:
@@ -44,6 +45,9 @@ class ScienceBuddiesSpider(scrapy.Spider):
                 clean_text = re.sub('<[^<]+?>', '', content)
                 clean_text = clean_text.replace('\r', '').replace('\n', '')
                 clean_explanation += clean_text
+
+
+        # TODO parse description after <h1\2> abstract </h2> //*[@id="abstract"]
 
         yield {
             "title": title, 
