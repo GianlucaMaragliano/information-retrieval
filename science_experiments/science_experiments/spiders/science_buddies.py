@@ -13,7 +13,6 @@ class ScienceBuddiesSpider(scrapy.Spider):
     name = 'science_buddies'
 
     start_urls = ["https://www.sciencebuddies.org/science-experiments?p=1"]
-    # https://stevespangler.com/experiments/
 
     def parse(self, response: Response):
 
