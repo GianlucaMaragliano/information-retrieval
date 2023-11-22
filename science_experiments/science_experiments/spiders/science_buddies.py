@@ -47,7 +47,9 @@ class ScienceBuddiesSpider(scrapy.Spider):
             next_h3 = target_explanation.xpath('following::h3[1][contains(.,"Terms and Concepts")]')
             if next_h3:
                 explanation = target_explanation.xpath('following-sibling::*[following::h3[1][contains(.,"Terms and Concepts")]]').extract()
-
+            else:
+                explanation = target_explanation.xpath('following-sibling::*[following::h2[1][contains(.,"Materials")]]').extract()
+             
 
         clean_explanation = ""
         if explanation:
@@ -60,9 +62,13 @@ class ScienceBuddiesSpider(scrapy.Spider):
         target_description = response.xpath("//h2[@id='abstract']")
         description = ""
         if target_description:
-            next_h3 = target_description.xpath('following::h2[1]')
-            if next_h3:
-                description = target_description.xpath('following-sibling::*[following::h2[@id="summary"]]').extract()
+            # Select the div with a specific class name
+            next_div = target_description.xpath('following::div[@class="page-break-avoid"][1]')
+            
+            if next_div:
+                description = target_description.xpath('following-sibling::node()[following::div[1][@class="page-break-avoid"]]').extract()
+            else:
+                description = target_description.xpath('following-sibling::node()[following::h2[1][@id="summary"]]').extract()
 
         clean_description = ""
         if description:
