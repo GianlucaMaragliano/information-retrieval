@@ -1,5 +1,8 @@
 <script>
+import Document from "@/components/Document.vue";
+
 export default {
+  components: {Document},
   data() {
 
   },
@@ -22,9 +25,7 @@ export default {
 
 <template>
   <ul v-for="item in results">
-    <a v-bind:href=item.Link>
-      {{item.Title}}
-    </a>
+    <Document :document="item"></Document>
   </ul>
 
 </template>
