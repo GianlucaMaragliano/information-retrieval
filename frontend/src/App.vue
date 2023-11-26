@@ -1,13 +1,37 @@
-<script setup>
+<script>
 import SearchBar from "@/components/SearchBar.vue";
+import ResultList from "@/components/ResultList.vue";
+
+export default {
+  components: {ResultList, SearchBar},
+  data() {
+    return {
+      message: "",
+    };
+  },
+  mounted() {
+    try {
+      fetch("http://localhost:5000")
+          .then((response) => response.text())
+          .then((data) => {
+            this.message = data;
+          });
+    } catch (e) {
+      console.log(e)
+    }
+  },
+};
 </script>
 
 <template>
   <header>
-
+    <ResultList></ResultList>
   </header>
 
   <main>
+    <div>
+      <h1>{{ message }}</h1>
+    </div>
     <SearchBar></SearchBar>
   </main>
 </template>

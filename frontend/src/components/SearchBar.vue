@@ -1,9 +1,24 @@
-<script setup>
+<script>
+
+export default {
+  data() {
+    return{
+      query: '',
+    }
+  },
+  methods: {
+    async solveQuery() {
+      if (this.query) {
+        await this.$store.dispatch("fetchQuery", this.query)
+      }
+    }
+  }
+}
 
 </script>
 
 <template>
-  <input type="text" v-model="input" placeholder="Search Science Experiment..." />
+  <input type="text" v-model="query" placeholder="Search Science Experiment..." @keyup.enter="solveQuery()"/>
 </template>
 
 <style scoped>
@@ -24,7 +39,7 @@ body {
 
 input {
   display: block;
-  width: 350px;
+  width: 550px;
   margin: 20px auto;
   padding: 10px 45px;
   background: black url("assets/search_icon.svg") no-repeat 15px center;
