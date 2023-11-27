@@ -52,7 +52,7 @@ export default {
   display: block;
   font-size: 23px;
   font-weight: bold;
-  color: hsl(33, 100%, 49%);
+  color: hsl(208, 100%, 43%);
   text-decoration: none;
   margin-bottom: 5px;
 }
