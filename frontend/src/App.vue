@@ -44,11 +44,11 @@ export default {
 }
 
 #search-bar {
-  width: 100%;
+  width: 60%;
   height: 100vh;
   position: fixed;
   top: 50%;
-  right: -25%;
+  right: -5%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
@@ -57,7 +57,7 @@ export default {
 }
 
 img {
-  width: 30%;
+  width: 50%;
 }
 
 
