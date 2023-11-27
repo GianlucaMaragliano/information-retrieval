@@ -1,11 +1,13 @@
 <script>
 import SearchBar from "@/components/SearchBar.vue";
 import ResultList from "@/components/ResultList.vue";
+import cloud2 from "@/assets/cloud4.png";
 export default {
   components: {ResultList, SearchBar},
   data() {
     return {
       message: "",
+      img: cloud2
     };
   },
   mounted() {
@@ -26,11 +28,9 @@ export default {
     <div id="results">
       <ResultList></ResultList>
     </div>
-    <div id="search-bar">
-
+    <div id="search-bar"  :style="{ 'background-image': 'url(' + img + ')', 'background-repeat': 'no-repeat', 'background-position': 'center ', 'background-size': '80% 50%'}">
         <img src="./assets/science.webp" alt="Your Image Alt Text" />
-
-    <SearchBar></SearchBar>
+        <SearchBar></SearchBar>
     </div>
 </template>
 
@@ -45,6 +45,7 @@ export default {
 
 #search-bar {
   width: 100%;
+  height: 100vh;
   position: fixed;
   top: 50%;
   right: -25%;
