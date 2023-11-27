@@ -3,3 +3,6 @@
 *.jsonl
 *.txt
 index_3docs
+
+backend/venv/
+backend/.venv/
