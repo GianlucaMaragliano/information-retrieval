@@ -73,7 +73,7 @@ docs_df['docno'] = docno
 
 docs_df['explanation'] = docs_df['explanation'].apply(lambda x: re.sub(r'[^\x00-\x7F]+', '', x))
 docs_df['explanation'] = docs_df['explanation'].apply(lambda x: re.sub(r'(Figure[ ]{0,1}[0-9])', '', x))
-docs_df['explanation'] = docs_df['explanation'].apply(lambda x: re.sub(r'/\(\s*\)/', '', x))
+docs_df['explanation'] = docs_df['explanation'].apply(lambda x: re.sub(r'\(\s*\)', '', x))
 
 docs_df['text'] = docs_df['title'] + ' ' + docs_df['subject'] + ' ' + docs_df['explanation']
 
