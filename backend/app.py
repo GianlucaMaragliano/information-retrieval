@@ -14,7 +14,6 @@ def hello_world():
 
 @app.route('/query/<query>', methods=['GET'])
 def resolve_query(query):
-    print(query)
     res = br.search(query)
     return retrieve_exp(res).to_json(orient='records')
 
