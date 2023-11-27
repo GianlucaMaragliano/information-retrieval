@@ -1,7 +1,6 @@
 <script>
 import SearchBar from "@/components/SearchBar.vue";
 import ResultList from "@/components/ResultList.vue";
-
 export default {
   components: {ResultList, SearchBar},
   data() {
