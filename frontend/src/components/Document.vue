@@ -23,23 +23,29 @@ export default {
   <div class="result-box">
     <a v-bind:href="document.link" target="_blank" rel="noreferrer" class="result-title">
       {{ document.title }}
+      <p v-if="document.tescription" class="result-text">
+        {{ this.str_limit(document.Description, 200) }}
+      </p>
+      <p v-else class="result-text">
+        {{ this.str_limit(document.explanation, 200) }}
+      </p>
     </a>
-    <p v-if="document.tescription" class="result-text">
-      {{ this.str_limit(document.Description, 200) }}
-    </p>
-    <p v-else class="result-text">
-      {{ this.str_limit(document.explanation, 200) }}
-    </p>
   </div>
 </template>
 
 <style scoped>
 .result-box {
-  width: 80%; /* Adjust as needed */
-  border: 3px solid; /* Border color */
+  width: 800px;
+  border: 3px solid;
   border-radius: 10px;
   padding: 10px;
-  margin-bottom: 20px; /* Adjust as needed */
+  margin-bottom: 20px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.result-box:hover {
+  background-color: black;
+  transform: scale(1.05);
 }
 
 .result-title {
@@ -48,12 +54,12 @@ export default {
   font-weight: bold;
   color: hsla(160, 100%, 37%, 1);
   text-decoration: none;
-  margin-bottom: 5px; /* Adjust as needed */
+  margin-bottom: 5px;
 }
 
 .result-text {
   font-size: 14px;
-  color: lightgray; /* Text color */
+  color: lightgray;
   margin: 0;
 }
 </style>
