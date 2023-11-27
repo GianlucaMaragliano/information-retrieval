@@ -25,10 +25,10 @@ export default {
       {{ document.title }}
     </a>
     <p v-if="document.tescription" class="result-text">
-      {{ this.str_limit(document.Description, 90) }}
+      {{ this.str_limit(document.Description, 200) }}
     </p>
     <p v-else class="result-text">
-      {{ this.str_limit(document.explanation, 90) }}
+      {{ this.str_limit(document.explanation, 200) }}
     </p>
   </div>
 </template>

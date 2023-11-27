@@ -6,7 +6,6 @@ export default {
   data() {
     return {
       showMore: false,
-      counter: 10
     };
   },
   computed: {
@@ -22,6 +21,14 @@ export default {
       } else {
         return this.results.slice(0, 10)
       }
+    },
+    counter() {
+      if (this.query && this.showMore) {
+        return this.$store.state.results.length
+      } else if (this.query) {
+        return 10
+      }
+      return 0
     }
   },
   watch: {
@@ -50,12 +57,13 @@ export default {
 
 <template>
 
-  <h3 v-if="query"> Found {{results.length}} results for "{{query}}", showing best </h3>
+  <h3 v-if="query"> Found {{results.length}} results for "{{query}}".</h3>
+  <h3 v-if="counter > 0"> Showing {{counter}} most relevant</h3>
   <ul v-for="item in displayedResults" :key="item.id">
     <Document :document="item"></Document>
   </ul>
   <div id="button">
-    <button v-if="results.length > 9" @click="showMoreResults" class="show-more-button">
+    <button v-if="results.length > 10" @click="showMoreResults" class="show-more-button">
       {{ showMore ? 'Show Less' : 'Show More' }}
     </button>
   </div>
