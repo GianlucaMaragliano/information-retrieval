@@ -24,43 +24,41 @@ export default {
 </script>
 
 <template>
-  <header>
-    <ResultList></ResultList>
-  </header>
-
-  <main>
-    <div>
+    <div id="results">
+      <ResultList></ResultList>
+    </div>
+    <div id="search-bar">
+      <div>
       <h1>{{ message }}</h1>
     </div>
     <SearchBar></SearchBar>
-  </main>
+    </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+
+#results {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 20px 100px 20px 100px;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+#search-bar {
+  width: 100%;
+  position: fixed;
+  top: 50%;
+  right: -25%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
+
+
 
 @media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
 }
 </style>

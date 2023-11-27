@@ -1,4 +1,4 @@
-#!/home/gianluca/Desktop/TerzoAnno/5th/Information Retrieval/information-retrieval/backend/venv/bin/python
+#!/home/raffaele/Desktop/5th Semester/Information Retrieval/information-retrieval/backend/venv/bin/python3
 # coding:utf-8
 """Inscriptis command line client."""
 
