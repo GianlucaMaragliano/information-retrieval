@@ -1,5 +1,6 @@
 import pyterrier as pt
 import pandas as pd
+import re
 
 
 # DEFINING HELPER FUNCTIONS
@@ -69,6 +70,11 @@ docs_df = docs_df.loc[docs_df["explanation"] != ""]
 
 docno = ['d'+ str(i) for i in range(docs_df.shape[0])]
 docs_df['docno'] = docno
+
+docs_df['explanation'] = docs_df['explanation'].apply(lambda x: re.sub(r'[^\x00-\x7F]+', '', x))
+docs_df['explanation'] = docs_df['explanation'].apply(lambda x: re.sub(r'(Figure[ ]{0,1}[0-9])', '', x))
+docs_df['explanation'] = docs_df['explanation'].apply(lambda x: re.sub(r'/\(\s*\)/', '', x))
+
 docs_df['text'] = docs_df['title'] + ' ' + docs_df['subject'] + ' ' + docs_df['explanation']
 
 exp_title = docs_df.title.values
