@@ -23,11 +23,11 @@ export default {
   <div class="result-box">
     <a v-bind:href="document.link" target="_blank" rel="noreferrer" class="result-title">
       {{ document.title }}
-      <p v-if="document.tescription" class="result-text">
-        {{ this.str_limit(document.Description, 200) }}
+      <p v-if="document.description" class="result-text">
+        {{ this.str_limit(document.description, 240) }}
       </p>
       <p v-else class="result-text">
-        {{ this.str_limit(document.explanation, 200) }}
+        {{ this.str_limit(document.explanation, 240) }}
       </p>
     </a>
   </div>

@@ -75,8 +75,9 @@ export default {
 <template>
 
   <h3 v-if="query"> Found {{results.length}} results for "{{query}}" with {{subjects.length}} different subjects</h3>
+  <button id="button2" class="show-more-button" v-if="counter > 0 && query" @click="changeMode()"> Show results per subject </button>
+
   <h3 v-if="counter > 0 && !this.clustering"> Showing {{counter}} most relevant</h3>
-  <button v-if="counter > 0 && query" @click="changeMode()"> Show results per subject </button>
 
   <div v-if="!this.clustering">
     <ul v-for="item in displayedResults" :key="item.id">
@@ -107,6 +108,15 @@ export default {
    align-items: center;
     justify-content: center;
    margin-left: -200px;
+ }
+
+ #button2 {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+    justify-content: center;
+   margin-left: 200px;
+   margin-bottom: 15px;
  }
 
  .show-more-button {

@@ -18,7 +18,7 @@ export default {
 </script>
 
 <template>
-  <input type="text" v-model="query" placeholder="Search Science Experiment..." @keyup.enter="solveQuery()"/>
+  <input type="text" v-model="query" placeholder="Search Science Experiment..." @keyup.enter="solveQuery()" spellcheck="false"/>
 </template>
 
 <style scoped>
