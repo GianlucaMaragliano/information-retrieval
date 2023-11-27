@@ -48,7 +48,7 @@ export default {
   font-weight: bold;
   color: hsla(160, 100%, 37%, 1);
   text-decoration: none;
-  //margin-bottom: 10px; /* Adjust as needed */
+  margin-bottom: 5px; /* Adjust as needed */
 }
 
 .result-text {

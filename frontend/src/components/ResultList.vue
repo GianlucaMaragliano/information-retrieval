@@ -4,7 +4,10 @@ import Document from "@/components/Document.vue";
 export default {
   components: {Document},
   data() {
-
+    return {
+      showMore: false,
+      counter: 10
+    };
   },
   computed: {
     results() {
@@ -12,6 +15,13 @@ export default {
     },
     query() {
       return this.$store.state.query
+    },
+    displayedResults() {
+      if (this.showMore) {
+        return this.results
+      } else {
+        return this.results.slice(0, 10)
+      }
     }
   },
   watch: {
@@ -30,18 +40,49 @@ export default {
       }
     }
   },
+  methods: {
+    showMoreResults() {
+      this.showMore = !this.showMore;
+    }
+  }
 }
 </script>
 
 <template>
 
-  <h3 v-if="query"> Found {{results.length}} results for "{{query}}"</h3>
-  <ul v-for="item in results">
+  <h3 v-if="query"> Found {{results.length}} results for "{{query}}", showing best </h3>
+  <ul v-for="item in displayedResults" :key="item.id">
     <Document :document="item"></Document>
   </ul>
-
+  <div id="button">
+    <button v-if="results.length > 9" @click="showMoreResults" class="show-more-button">
+      {{ showMore ? 'Show Less' : 'Show More' }}
+    </button>
+  </div>
 </template>
 
 <style scoped>
+ h3 {
+   margin-bottom: 15px;
+ }
 
+ #button {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+ }
+
+ .show-more-button {
+   background-color: transparent;
+   color: hsla(160, 100%, 37%, 1);
+   padding: 8px 16px;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   width: 50%;
+ }
+
+ .show-more-button:hover {
+   background-color: black;
+ }
 </style>
