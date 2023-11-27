@@ -28,9 +28,9 @@ export default {
       <ResultList></ResultList>
     </div>
     <div id="search-bar">
-      <div>
-      <h1>{{ message }}</h1>
-    </div>
+
+        <img src="./assets/science.webp" alt="Your Image Alt Text" />
+
     <SearchBar></SearchBar>
     </div>
 </template>
@@ -54,6 +54,10 @@ export default {
   align-items: center;
   flex-direction: column;
   justify-content: center;
+}
+
+img {
+  width: 30%;
 }
 
 
