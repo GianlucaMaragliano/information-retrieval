@@ -1,7 +1,6 @@
 <script>
 import SearchBar from "@/components/SearchBar.vue";
 import ResultList from "@/components/ResultList.vue";
-import cloud2 from "@/assets/circle.png";
 export default {
   components: {ResultList, SearchBar},
   data() {
@@ -28,8 +27,8 @@ export default {
     <div id="results">
       <ResultList></ResultList>
     </div>
-    <div id="search-bar"  :style="{ 'background-image': 'url(' + img + ')', 'background-repeat': 'no-repeat', 'background-position': 'center'}">
-        <img src="./assets/science.webp" alt="Your Image Alt Text" />
+    <div id="search-bar">
+        <img src="./assets/logo.png" alt="Your Image Alt Text" />
         <SearchBar></SearchBar>
     </div>
 </template>
