@@ -65,6 +65,7 @@ docs_df_3 = docs_df_3.apply(lambda x: x.str.strip() if x.dtype == "object" else 
 docs_df = pd.concat([docs_df, docs_df_2], ignore_index=True)
 docs_df = pd.concat([docs_df, docs_df_3], ignore_index=True)
 docs_df = docs_df.fillna('')
+docs_df.loc[docs_df['subject'] == '', 'subject'] = 'General Science'
 docs_df = docs_df.loc[docs_df["explanation"] != ""]
 
 
