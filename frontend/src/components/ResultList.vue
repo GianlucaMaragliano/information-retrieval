@@ -23,9 +23,9 @@ export default {
       }
     },
     counter() {
-      if (this.query && this.showMore) {
-        return this.$store.state.results.length
-      } else if (this.query) {
+      if (this.query && (this.showMore || this.$store.state.results.length <= 10)) {
+        return 0
+      } else if (this.$store.state.results.length !== 0) {
         return 10
       }
       return 0
@@ -64,7 +64,7 @@ export default {
   </ul>
   <div id="button">
     <button v-if="results.length > 10" @click="showMoreResults" class="show-more-button">
-      {{ showMore ? 'Show Less' : 'Show More' }}
+      {{ showMore ? 'Show Less' : 'Show All' }}
     </button>
   </div>
 </template>
