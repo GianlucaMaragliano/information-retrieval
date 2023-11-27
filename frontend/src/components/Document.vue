@@ -20,10 +20,11 @@ export default {
 </script>
 
 <template>
-  <a v-bind:href=document.Link target="_blank" rel="noreferrer">
-    {{document.Title}}
+  <a v-bind:href=document.link target="_blank" rel="noreferrer">
+    {{document.title}}
   </a>
-  <p>{{this.str_limit(document.Description, 90)}}</p>
+  <p v-if="document.tescription"> {{this.str_limit(document.Description, 90)}}</p>
+  <p v-else> {{this.str_limit(document.explanation, 90)}}</p>
 </template>
 
 <style scoped>

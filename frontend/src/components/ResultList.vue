@@ -9,10 +9,20 @@ export default {
   computed: {
     results() {
       return this.$store.state.results
+    },
+    query() {
+      return this.$store.state.query
     }
   },
   watch: {
     results: {
+      immediate: false,
+      deep: false,
+      handler(newValue, oldValue) {
+        console.log(newValue);
+      }
+    },
+    query: {
       immediate: false,
       deep: false,
       handler(newValue, oldValue) {
@@ -24,6 +34,8 @@ export default {
 </script>
 
 <template>
+
+  <h3 v-if="query"> Found {{results.length}} results for "{{query}}"</h3>
   <ul v-for="item in results">
     <Document :document="item"></Document>
   </ul>
