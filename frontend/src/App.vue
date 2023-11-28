@@ -20,15 +20,36 @@ export default {
       console.log(e)
     }
   },
+  computed: {
+    query() {
+      return this.$store.state.query
+    },
+  },
+  watch: {
+    query: {
+      immediate: false,
+      deep: false,
+    }
+  },
+  methods: {
+    resetQuery() {
+      this.$store.dispatch("resetQuery")
+    }
+  }
 };
 </script>
 
 <template>
-    <div id="results">
+    <div id="results" v-if="query">
       <ResultList></ResultList>
     </div>
+  <div id="welcome" v-else>
+    <h1> Welcome to Science Hub!</h1>
+    <h2> Here you can find science experiments for middle and high schools and much more! </h2>
+    <h3> Start your search by typing your interest or have a look at the suggested topics. </h3>
+  </div>
     <div id="search-bar">
-        <img src="./assets/logo.png" alt="Your Image Alt Text" />
+        <img src="./assets/logo.png" alt="Your Image Alt Text" @click="resetQuery()"/>
         <SearchBar></SearchBar>
     </div>
 </template>
@@ -57,6 +78,7 @@ export default {
 
 img {
   width: 50%;
+  cursor: pointer;
 }
 
 
