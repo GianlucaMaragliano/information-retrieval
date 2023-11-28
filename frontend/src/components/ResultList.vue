@@ -25,16 +25,14 @@ export default {
           this.set(s, 1);
         }
       }
-      let subjects = []
-      let subj_map = new Map()
+      const subj_map = new Map()
       this.$store.state.results.forEach(el => {
-            subjects.push(el.subject)
             subj_map.inc(el.subject)
           }
       )
-      // let test = Array.from(subj_map.keys())
-      // return [...new Set(test.filter(n => n))]
-      return [...new Set(subjects.filter(n => n))];
+      const mapSort1 = new Map([...subj_map.entries()].sort((a, b) => b[1] - a[1]));
+      let test = Array.from(mapSort1.keys())
+      return [...new Set(test.filter(n => n))]
     },
     displayedResults() {
       if (this.showMore) {

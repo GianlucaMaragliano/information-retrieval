@@ -7,7 +7,8 @@ export default {
   components: {ResultList, SearchBar},
   data() {
     return {
-      sample_queries : ["Rocket", "Javascript Game", "Explosive Car", "Mushrooms Bridge", "Acid Water", "Volcano Eruption"],
+      sample_queries : ["Rocket", "Javascript Game", "Explosive Car", "Mushrooms Bridge", "Acid Water",
+    "Volcano Eruption", "Homemade Yogurt"],
       three_suggestion: []
     };
   },
