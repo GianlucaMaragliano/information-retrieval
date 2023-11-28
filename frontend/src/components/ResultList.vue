@@ -142,7 +142,7 @@ export default {
    display: flex;
    flex-direction: column;
    align-items: center;
-    justify-content: center;
+   justify-content: center;
    margin-left: -200px;
  }
 
@@ -150,7 +150,7 @@ export default {
    display: flex;
    flex-direction: column;
    align-items: center;
-    justify-content: center;
+   justify-content: center;
    margin-left: 200px;
    margin-bottom: 15px;
  }
@@ -180,6 +180,6 @@ export default {
    width: 24px;
    height: 24px;
    fill: none;
-   stroke: hsl(208, 100%, 43%);
+   stroke: hsl(196, 76%, 39%);
  }
 </style>
