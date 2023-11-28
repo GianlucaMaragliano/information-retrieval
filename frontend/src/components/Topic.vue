@@ -6,7 +6,7 @@ export default {
   components: {Document},
   data () {
     return {
-      clicked: false,
+      clicked: true,
       isArrowRotated: false,
     }
   },
