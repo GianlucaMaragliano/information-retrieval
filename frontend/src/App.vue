@@ -1,35 +1,76 @@
 <script>
 import SearchBar from "@/components/SearchBar.vue";
 import ResultList from "@/components/ResultList.vue";
+import {ref} from "vue";
+
 export default {
   components: {ResultList, SearchBar},
   data() {
     return {
-      message: "",
-      // img: cloud2
+      sample_queries : ["Rocket", "Javascript Game", "Explosive Car", "Mushrooms Bridge", "Acid Water", "Volcano Eruption"],
+      three_suggestion: []
     };
   },
-  mounted() {
-    try {
-      fetch("http://localhost:5000")
-          .then((response) => response.text())
-          .then((data) => {
-            this.message = data;
-          });
-    } catch (e) {
-      console.log(e)
+  setup() {
+    const searchBarRef = ref(null)
+
+    return {
+      searchBarRef
     }
   },
+  mounted() {
+    this.generateSuggestion()
+    console.log(this.searchBarRef)
+  },
+  computed: {
+    query() {
+      return this.$store.state.query
+    },
+  },
+  watch: {
+    query: {
+      immediate: false,
+      deep: false,
+    }
+  },
+  methods: {
+    resetQuery() {
+      if (this.query) {
+        this.searchBarRef.resetQuery()
+        this.$store.dispatch("resetQuery")
+        this.generateSuggestion()
+      }
+    },
+    generateSuggestion() {
+      const shuffled = this.sample_queries.sort(() => 0.5 - Math.random());
+      this.three_suggestion = shuffled.slice(0, 3)
+    },
+    async fetchSuggested(event) {
+      let sugg_query = event.target.innerHTML
+      await this.$store.dispatch("fetchQuery", sugg_query)
+      this.searchBarRef.setQuery(sugg_query)
+    }
+  }
 };
 </script>
 
 <template>
-    <div id="results">
+    <div id="results" v-if="query">
       <ResultList></ResultList>
     </div>
+
+    <div id="welcome" v-else>
+      <h1> Welcome to Science Hub!</h1>
+      <h2> Here you can find science experiments for middle and high schools and much more! </h2>
+      <h3> Start your search by typing your interest or have a look at the suggested topics. </h3>
+      <div v-for="query in this.three_suggestion" class="query-suggestion" @click="fetchSuggested($event)">
+        {{query}}
+      </div>
+    </div>
+
     <div id="search-bar">
-        <img src="./assets/logo.png" alt="Your Image Alt Text" />
-        <SearchBar></SearchBar>
+        <img src="./assets/logo.png" alt="Your Image Alt Text" @click="resetQuery()"/>
+        <SearchBar ref="searchBarRef"></SearchBar>
     </div>
 </template>
 
@@ -57,10 +98,47 @@ export default {
 
 img {
   width: 50%;
+  cursor: pointer;
 }
 
+.query-suggestion {
+  background-color: transparent;
+  color: hsl(196, 76%, 39%);
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
 
+.query-suggestion:hover {
+  background-color: black;
+}
 
+#welcome {
+  width: 60%;
+  height: 100vh;
+  position: fixed;
+  top: 50%;
+  left: -5%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 70px;
+}
+
+h2 {
+  font-size: 20px;
+}
 @media (min-width: 1024px) {
 
 }

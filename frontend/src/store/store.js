@@ -30,6 +30,9 @@ export default createStore({
             // console.log(results)
             context.commit("setQuery", query)
             return context.commit("setResults", results)
+        },
+        resetQuery(context) {
+            return context.commit("setQuery", "")
         }
     }
 })
