@@ -137,7 +137,7 @@ export default {
 
  .show-more-button {
    background-color: transparent;
-   color: hsl(208, 100%, 43%);
+   color: hsl(196, 76%, 39%);
    padding: 8px 16px;
    border: none;
    border-radius: 4px;

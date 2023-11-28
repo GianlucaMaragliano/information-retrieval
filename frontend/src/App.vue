@@ -5,20 +5,12 @@ export default {
   components: {ResultList, SearchBar},
   data() {
     return {
-      message: "",
-      // img: cloud2
+      sample_queries : ["Rocket", "Javascript Game", "Explosive Car"],
+      three_suggestion: []
     };
   },
   mounted() {
-    try {
-      fetch("http://localhost:5000")
-          .then((response) => response.text())
-          .then((data) => {
-            this.message = data;
-          });
-    } catch (e) {
-      console.log(e)
-    }
+    this.generateSuggestion()
   },
   computed: {
     query() {
@@ -33,7 +25,18 @@ export default {
   },
   methods: {
     resetQuery() {
-      this.$store.dispatch("resetQuery")
+      if (this.query) {
+        this.$store.dispatch("resetQuery")
+        this.generateSuggestion()
+      }
+    },
+    generateSuggestion() {
+      const shuffled = this.sample_queries.sort(() => 0.5 - Math.random());
+      this.three_suggestion = shuffled.slice(0, 3)
+    },
+    async fetchSuggested(event) {
+      let sugg_query = event.target.innerHTML
+      await this.$store.dispatch("fetchQuery", sugg_query)
     }
   }
 };
@@ -47,6 +50,10 @@ export default {
     <h1> Welcome to Science Hub!</h1>
     <h2> Here you can find science experiments for middle and high schools and much more! </h2>
     <h3> Start your search by typing your interest or have a look at the suggested topics. </h3>
+
+    <div v-for="query in this.three_suggestion" class="query-suggestion" @click="fetchSuggested($event)">
+      {{query}}
+    </div>
   </div>
     <div id="search-bar">
         <img src="./assets/logo.png" alt="Your Image Alt Text" @click="resetQuery()"/>
@@ -81,7 +88,19 @@ img {
   cursor: pointer;
 }
 
+.query-suggestion {
+  background-color: transparent;
+  color: hsl(196, 76%, 39%);
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50%;
+}
 
+.query-suggestion:hover {
+  background-color: black;
+}
 
 @media (min-width: 1024px) {
 
