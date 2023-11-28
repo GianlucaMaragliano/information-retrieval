@@ -18,8 +18,22 @@ export default {
       return this.$store.state.query
     },
     subjects() {
+      Map.prototype.inc = function(s) {
+        if (this.has(s)) {
+          this.set(s, this.get(s) + 1);
+        } else {
+          this.set(s, 1);
+        }
+      }
       let subjects = []
-      this.$store.state.results.forEach(el => subjects.push(el.subject))
+      let subj_map = new Map()
+      this.$store.state.results.forEach(el => {
+            subjects.push(el.subject)
+            subj_map.inc(el.subject)
+          }
+      )
+      // let test = Array.from(subj_map.keys())
+      // return [...new Set(test.filter(n => n))]
       return [...new Set(subjects.filter(n => n))];
     },
     displayedResults() {
