@@ -4,6 +4,7 @@ export default {
   data() {
     return{
       query: '',
+      message: "Search Science Experiment..."
     }
   },
   methods: {
@@ -11,6 +12,12 @@ export default {
       if (this.query) {
         await this.$store.dispatch("fetchQuery", this.query)
       }
+    },
+    resetQuery() {
+      this.query = ''
+    },
+    setQuery(q) {
+      this.query = q
     }
   }
 }
@@ -18,7 +25,7 @@ export default {
 </script>
 
 <template>
-  <input type="text" v-model="query" placeholder="Search Science Experiment..." @keyup.enter="solveQuery()" spellcheck="false"/>
+  <input type="text" v-model="query" :placeholder=this.message @keyup.enter="solveQuery()" spellcheck="false"/>
 </template>
 
 <style scoped>

@@ -1,16 +1,26 @@
 <script>
 import SearchBar from "@/components/SearchBar.vue";
 import ResultList from "@/components/ResultList.vue";
+import {ref} from "vue";
+
 export default {
   components: {ResultList, SearchBar},
   data() {
     return {
-      sample_queries : ["Rocket", "Javascript Game", "Explosive Car"],
+      sample_queries : ["Rocket", "Javascript Game", "Explosive Car", "Mushrooms Bridge", "Acid Water"],
       three_suggestion: []
     };
   },
+  setup() {
+    const searchBarRef = ref(null)
+
+    return {
+      searchBarRef
+    }
+  },
   mounted() {
     this.generateSuggestion()
+    console.log(this.searchBarRef)
   },
   computed: {
     query() {
@@ -26,6 +36,7 @@ export default {
   methods: {
     resetQuery() {
       if (this.query) {
+        this.searchBarRef.resetQuery()
         this.$store.dispatch("resetQuery")
         this.generateSuggestion()
       }
@@ -37,6 +48,7 @@ export default {
     async fetchSuggested(event) {
       let sugg_query = event.target.innerHTML
       await this.$store.dispatch("fetchQuery", sugg_query)
+      this.searchBarRef.setQuery(sugg_query)
     }
   }
 };
@@ -57,7 +69,7 @@ export default {
   </div>
     <div id="search-bar">
         <img src="./assets/logo.png" alt="Your Image Alt Text" @click="resetQuery()"/>
-        <SearchBar></SearchBar>
+        <SearchBar ref="searchBarRef"></SearchBar>
     </div>
 </template>
 
