@@ -150,7 +150,6 @@ export default {
  #button2 {
    display: flex;
    flex-direction: column;
-   align-items: center;
    justify-content: center;
    margin-left: 200px;
    margin-bottom: 15px;
@@ -164,10 +163,6 @@ export default {
    border-radius: 4px;
    cursor: pointer;
    width: 50%;
- }
-
- .show-more-button:hover {
-   background-color: black;
  }
 
  #scroll-to-top {
