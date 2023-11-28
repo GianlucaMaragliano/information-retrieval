@@ -49,7 +49,8 @@ export default {
   <img id="logo" src="../assets/atom.svg" alt="Your Image Alt Text"/>
   <h2> {{this.topic}}: {{inherent_res.length}} result </h2>
   <div @click="show">
-      <img src="../assets/triangle.svg" alt="Your Image Alt Text" class="arrow-icon"/>
+      <img src="../assets/plus.svg" alt="Your Image Alt Text" class="arrow-icon" v-if="!isArrowRotated"/>
+      <img src="../assets/plus.svg" alt="Your Image Alt Text" class="arrow-icon-rotated" v-else/>
   </div>
   </div>
   <div v-if="clicked">
@@ -63,10 +64,21 @@ export default {
 </template>
 
 <style scoped>
-  .arrow-icon {
-    width: 15px;
+  .arrow-icon, .arrow-icon-rotated {
+    width: 20px;
     margin-inline: 15px;
     cursor: pointer;
+    margin-top: 10px;
+
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .arrow-icon-rotated {
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+
+    transition: transform 0.5s ease-in-out;
   }
 
   .header{
@@ -80,4 +92,5 @@ export default {
     width: 25px;
     margin-inline: 10px;
   }
+
 </style>

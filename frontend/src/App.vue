@@ -106,6 +106,7 @@ img {
   background-color: transparent;
   color: hsl(196, 76%, 39%);
   padding: 8px 16px;
+  margin-block: 8px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -135,10 +136,15 @@ img {
 
 h1 {
   font-size: 70px;
+  margin-block: 10px;
 }
 
 h2 {
   font-size: 20px;
+  margin-block: 10px;
+}
+h3 {
+  margin-block: 10px;
 }
 @media (min-width: 1024px) {
 
