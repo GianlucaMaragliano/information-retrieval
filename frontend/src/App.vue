@@ -7,7 +7,7 @@ export default {
   components: {ResultList, SearchBar},
   data() {
     return {
-      sample_queries : ["Rocket", "Javascript Game", "Explosive Car", "Mushrooms Bridge", "Acid Water"],
+      sample_queries : ["Rocket", "Javascript Game", "Explosive Car", "Mushrooms Bridge", "Acid Water", "Volcano Eruption"],
       three_suggestion: []
     };
   },
@@ -58,15 +58,16 @@ export default {
     <div id="results" v-if="query">
       <ResultList></ResultList>
     </div>
-  <div id="welcome" v-else>
-    <h1> Welcome to Science Hub!</h1>
-    <h2> Here you can find science experiments for middle and high schools and much more! </h2>
-    <h3> Start your search by typing your interest or have a look at the suggested topics. </h3>
 
-    <div v-for="query in this.three_suggestion" class="query-suggestion" @click="fetchSuggested($event)">
-      {{query}}
+    <div id="welcome" v-else>
+      <h1> Welcome to Science Hub!</h1>
+      <h2> Here you can find science experiments for middle and high schools and much more! </h2>
+      <h3> Start your search by typing your interest or have a look at the suggested topics. </h3>
+      <div v-for="query in this.three_suggestion" class="query-suggestion" @click="fetchSuggested($event)">
+        {{query}}
+      </div>
     </div>
-  </div>
+
     <div id="search-bar">
         <img src="./assets/logo.png" alt="Your Image Alt Text" @click="resetQuery()"/>
         <SearchBar ref="searchBarRef"></SearchBar>
@@ -108,12 +109,36 @@ img {
   border-radius: 4px;
   cursor: pointer;
   width: 50%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .query-suggestion:hover {
   background-color: black;
 }
 
+#welcome {
+  width: 60%;
+  height: 100vh;
+  position: fixed;
+  top: 50%;
+  left: -5%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 70px;
+}
+
+h2 {
+  font-size: 20px;
+}
 @media (min-width: 1024px) {
 
 }
