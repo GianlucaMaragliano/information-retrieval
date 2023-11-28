@@ -21,7 +21,7 @@ export default {
     }
   },
   computed: {
-    ineherent_res() {
+    inherent_res() {
       let res = []
       this.results.forEach(el => {
         if (el.subject === this.topic)
@@ -30,7 +30,7 @@ export default {
       return res
     },
     watch: {
-      ineherent_res: {
+      inherent_res: {
         immediate: false,
         deep: false,
         handler(newValue, oldValue) {
@@ -45,28 +45,18 @@ export default {
 
 <template>
 
-  <h2> {{this.topic}}: {{ineherent_res.length}} result </h2>
+  <div class="header">
+  <img id="logo" src="../assets/atom.svg" alt="Your Image Alt Text"/>
+  <h2> {{this.topic}}: {{inherent_res.length}} result </h2>
   <div @click="show">
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        class="arrow-icon"
-    >
-      <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M5 10l7-7m0 0l7 7m-7-7v18"
-      />
-    </svg>
+      <img src="../assets/triangle.svg" alt="Your Image Alt Text" class="arrow-icon"/>
+  </div>
   </div>
   <div v-if="clicked">
 
   </div>
 
-  <ul v-else v-for="exp in ineherent_res">
+  <ul v-else v-for="exp in inherent_res">
       <Document :document="exp"></Document>
   </ul>
 
@@ -74,11 +64,20 @@ export default {
 
 <style scoped>
   .arrow-icon {
-    width: 24px;
-    height: 24px;
-    fill: none;
-    stroke: hsl(208, 100%, 43%);
-    transition: transform 0.3s;
-    transform: rotate(180deg); /* Rotate the arrow when the class is present */
+    width: 15px;
+    margin-inline: 15px;
+    cursor: pointer;
+  }
+
+  .header{
+    display: flex;
+    flex-direction: row;
+    margin-block: 10px;
+    align-items: center;
+  }
+
+  #logo {
+    width: 25px;
+    margin-inline: 10px;
   }
 </style>
