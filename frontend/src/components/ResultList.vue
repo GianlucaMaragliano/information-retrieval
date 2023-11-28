@@ -81,6 +81,10 @@ export default {
     },
     changeMode() {
       this.clustering = !this.clustering;
+    },
+    scrollToTop() {
+      console.log("Clicked")
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 }
@@ -88,14 +92,30 @@ export default {
 
 <template>
 
-  <h3 v-if="query"> Found {{results.length}} results for "{{query}}" with {{subjects.length}} different subjects</h3>
-  <button id="button2" class="show-more-button" v-if="query" @click="changeMode()">
-   {{this.clustering ? "Show all results" : "Show results per subject"}}
+  <h3 id="tmp" v-if="query"> Found {{results.length}} results for "{{query}}" with {{subjects.length}} different subjects</h3>
+  <button id="button2" class="show-more-button" v-if="counter > 0 && query" @click="changeMode()">
+    {{clustering ? 'Show per Experiment' : 'Show per Subject'}}
   </button>
 
   <h3 v-if="counter > 0 && !this.clustering"> Showing {{counter}} most relevant</h3>
 
   <div v-if="!this.clustering">
+    <div id="scroll-to-top" @click="scrollToTop">
+      <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="arrow-icon"
+      >
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 10l7-7m0 0l7 7m-7-7v18"
+        />
+      </svg>
+    </div>
     <ul v-for="item in displayedResults" :key="item.id">
       <Document :document="item"></Document>
     </ul>
@@ -147,5 +167,19 @@ export default {
 
  .show-more-button:hover {
    background-color: black;
+ }
+
+ #scroll-to-top {
+   position: fixed;
+   bottom: 20px;
+   left: 50px;
+   cursor: pointer;
+ }
+
+ .arrow-icon {
+   width: 24px;
+   height: 24px;
+   fill: none;
+   stroke: hsl(208, 100%, 43%);
  }
 </style>
