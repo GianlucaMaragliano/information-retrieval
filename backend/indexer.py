@@ -5,6 +5,7 @@ import re
 import nltk
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
+nltk.download('punkt')
 
 import sklearn
 from sklearn.manifold import TSNE
