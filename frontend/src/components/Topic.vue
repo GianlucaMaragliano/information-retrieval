@@ -48,7 +48,7 @@ export default {
   <div class="header">
   <img id="logo" src="../assets/atom.svg" alt="Your Image Alt Text"/>
     <h2>
-      <span style="color: #0476D0;">{{ this.topic }}:</span> {{ inherent_res.length }} result
+      <span style="color: hsl(204, 69%, 33%);">{{ this.topic }}:</span> {{ inherent_res.length }} result
     </h2>
   <div @click="show">
       <img src="../assets/plus.svg" alt="Your Image Alt Text" class="arrow-icon" v-if="!isArrowRotated"/>

@@ -8,7 +8,7 @@ export default {
   data() {
     return {
       sample_queries : ["Rocket", "Javascript Game", "Explosive Car", "Mushrooms Bridge", "Acid Water",
-    "Volcano Eruption", "Homemade Yogurt"],
+    "Volcano Eruption", "Homemade Yogurt", "Phone Radiations", "Colored Fire"],
       three_suggestion: []
     };
   },
@@ -126,7 +126,7 @@ img {
   height: 100vh;
   position: fixed;
   top: 50%;
-  left: -5%;
+  left: 0;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
