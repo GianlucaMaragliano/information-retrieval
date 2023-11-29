@@ -91,7 +91,7 @@ export default {
 <template>
 
   <h3 id="tmp" v-if="query"> Found {{results.length}} results for "{{query}}" with {{subjects.length}} different subjects</h3>
-  <button id="button2" class="show-more-button" v-if="query" @click="changeMode()">
+  <button v-if="results.length > 0" id="button2" class="show-more-button" @click="changeMode()">
     {{clustering ? 'Show per Experiment' : 'Show per Subject'}}
   </button>
 
