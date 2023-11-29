@@ -105,17 +105,14 @@ X = tfidf.fit_transform(stemmed_text)
 # K-Means
 n_clusters = len(subjects) #set the number of clusters that you want
 kmeans = KMeans(n_clusters=n_clusters, random_state=0, n_init=10).fit(X)
-# dbscan = DBSCAN().fit(X) # finds automatically the number of cluster!
 
 clustering_labels = kmeans.labels_ #clustering labels
-# clustering_labels = dbscan.labels_ #clustering labels
 pd.DataFrame(X.toarray(), columns = tfidf.get_feature_names_out()) #TF-IDF Dataframe
 km_lab = kmeans.labels_
 
 docs_df['cluster'] = km_lab
 
 modified_docs_df = docs_df[docs_df['subject'] != '']  # remove empty subjects' rows
-
 cluster_df = modified_docs_df.groupby(['cluster'])['subject'].agg(lambda x: pd.Series.mode(x)[0]).to_frame().reset_index()
 founded_clusters = cluster_df['cluster'].tolist()
 
@@ -127,7 +124,9 @@ missing_df = pd.DataFrame(d)
 
 cluster_df = pd.concat([cluster_df, missing_df], ignore_index=True)
 
-docs_df['subject'] = docs_df['cluster'].map(cluster_df.set_index('cluster')['subject'])
+# ASSIGN CLUSTER SUBJECT ONLY WHERE SUBJECT IS MISSING
+empty_subject_mask = docs_df['subject'] == ''
+docs_df.loc[empty_subject_mask, 'subject'] = docs_df.loc[empty_subject_mask, 'cluster'].map(cluster_df.set_index('cluster')['subject'])
 
 # INDEXING
 exp_title = docs_df.title.values
