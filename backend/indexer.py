@@ -55,7 +55,11 @@ def retrieve_exp(df):
   df['explanation'] = explanation
   return df
 
-
+# CLUSTERING HELPER FUNCTIONS
+def apply_stem(text, stemmer):
+  words = word_tokenize(text)
+  stemmed_text = ' '.join([stemmer.stem(word) for word in words])
+  return stemmed_text
 
 # Start pyterrier
 if not pt.started():
@@ -81,13 +85,6 @@ docno = ['d'+ str(i) for i in range(docs_df.shape[0])]
 docs_df['docno'] = docno
 docs_df['text'] = docs_df['title'] + ' ' + docs_df['subject'] + ' ' + docs_df['explanation']
 
-
-
-# CLUSTERING HELPER FUNCTIONS
-def apply_stem(text, stemmer):
-  words = word_tokenize(text)
-  stemmed_text = ' '.join([stemmer.stem(word) for word in words])
-  return stemmed_text
 
 
 # CLUSTERING
