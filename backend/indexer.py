@@ -2,6 +2,16 @@ import pyterrier as pt
 import pandas as pd
 import re
 
+import nltk
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
+
+import sklearn
+from sklearn.manifold import TSNE
+from sklearn.cluster import KMeans
+from sklearn.manifold import TSNE
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 
 # DEFINING HELPER FUNCTIONS
 
@@ -56,28 +66,73 @@ if not pt.started():
 docs_df = pd.read_json("./science_experiments/experiment_archive.json")
 
 docs_df_2 = pd.read_json("./science_experiments/steve_spangler.json")
-docs_df_2 = docs_df_2.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
-
 docs_df_3 = pd.read_json("./science_experiments/science_buddies.json")
-docs_df_3 = docs_df_3.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
-
 
 docs_df = pd.concat([docs_df, docs_df_2], ignore_index=True)
 docs_df = pd.concat([docs_df, docs_df_3], ignore_index=True)
-docs_df = docs_df.fillna('')
-docs_df.loc[docs_df['subject'] == '', 'subject'] = 'General Science'
 docs_df = docs_df.loc[docs_df["explanation"] != ""]
+docs_df = docs_df.loc[docs_df["title"] != ""]
+docs_df = docs_df.fillna('')
+
+docs_df = docs_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
 
 
 docno = ['d'+ str(i) for i in range(docs_df.shape[0])]
 docs_df['docno'] = docno
-
-docs_df['explanation'] = docs_df['explanation'].apply(lambda x: re.sub(r'[^\x00-\x7F]+', '', x))
-docs_df['explanation'] = docs_df['explanation'].apply(lambda x: re.sub(r'(Figure[ ]{0,1}[0-9])', '', x))
-docs_df['explanation'] = docs_df['explanation'].apply(lambda x: re.sub(r'\(\s*\)', '', x))
-
 docs_df['text'] = docs_df['title'] + ' ' + docs_df['subject'] + ' ' + docs_df['explanation']
 
+
+
+# CLUSTERING HELPER FUNCTIONS
+def apply_stem(text, stemmer):
+  words = word_tokenize(text)
+  stemmed_text = ' '.join([stemmer.stem(word) for word in words])
+  return stemmed_text
+
+
+# CLUSTERING
+
+doc_ids = docs_df['docno'].tolist()
+texts = docs_df['text'].str.lower()
+
+subjects = docs_df['subject'].unique().tolist()
+
+stemmer = PorterStemmer()
+stemmed_text = [apply_stem(str(text), stemmer) for text in texts]
+
+tfidf = TfidfVectorizer(stop_words='english', lowercase = True, max_df = .9, min_df = 0.01, max_features = 1000)
+tfidf.fit_transform(stemmed_text).shape
+
+X = tfidf.fit_transform(stemmed_text)
+
+# K-Means
+n_clusters = len(subjects) #set the number of clusters that you want
+kmeans = KMeans(n_clusters=n_clusters, random_state=0, n_init=10).fit(X)
+# dbscan = DBSCAN().fit(X) # finds automatically the number of cluster!
+
+clustering_labels = kmeans.labels_ #clustering labels
+# clustering_labels = dbscan.labels_ #clustering labels
+pd.DataFrame(X.toarray(), columns = tfidf.get_feature_names_out()) #TF-IDF Dataframe
+km_lab = kmeans.labels_
+
+docs_df['cluster'] = km_lab
+
+modified_docs_df = docs_df[docs_df['subject'] != '']  # remove empty subjects' rows
+
+cluster_df = modified_docs_df.groupby(['cluster'])['subject'].agg(lambda x: pd.Series.mode(x)[0]).to_frame().reset_index()
+founded_clusters = cluster_df['cluster'].tolist()
+
+# IF NOT ABLE TO FIND THE CLUSTER, ASSIGN IT TO GENERAL SCIENCE
+missing_clusters = [i for i in range(n_clusters) if i not in founded_clusters]
+miss_clus_subj = ['General Science'for i in range(len(missing_clusters))]
+d = {'cluster': missing_clusters, 'subject': miss_clus_subj}
+missing_df = pd.DataFrame(d)
+
+cluster_df = pd.concat([cluster_df, missing_df], ignore_index=True)
+
+docs_df['subject'] = docs_df['cluster'].map(cluster_df.set_index('cluster')['subject'])
+
+# INDEXING
 exp_title = docs_df.title.values
 exp_link = docs_df.link.values
 exp_desc = docs_df.description.values
