@@ -98,7 +98,6 @@ stemmer = PorterStemmer()
 stemmed_text = [apply_stem(str(text), stemmer) for text in texts]
 
 tfidf = TfidfVectorizer(stop_words='english', lowercase = True, max_df = .9, min_df = 0.01, max_features = 1000)
-tfidf.fit_transform(stemmed_text).shape
 
 X = tfidf.fit_transform(stemmed_text)
 
@@ -107,7 +106,6 @@ n_clusters = len(subjects) #set the number of clusters that you want
 kmeans = KMeans(n_clusters=n_clusters, random_state=0, n_init=10).fit(X)
 
 clustering_labels = kmeans.labels_ #clustering labels
-pd.DataFrame(X.toarray(), columns = tfidf.get_feature_names_out()) #TF-IDF Dataframe
 km_lab = kmeans.labels_
 
 docs_df['cluster'] = km_lab
