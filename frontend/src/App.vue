@@ -5,10 +5,11 @@ import {ref} from "vue";
 
 export default {
   components: {ResultList, SearchBar},
-  data() {
+  data: function () {
     return {
-      sample_queries : ["Rocket", "Javascript Game", "Explosive Car", "Mushrooms Bridge", "Acid Water",
-    "Volcano Eruption", "Homemade Yogurt", "Phone Radiations", "Colored Fire"],
+      sample_queries: ["Rocket", "Javascript Game", "Explosive Car", "Mushrooms Bridge", "Acid Water",
+        "Volcano Eruption", "Homemade Yogurt", "Phone Radiations", "Colored Fire", "Machine Learning", "Football",
+        "Magnetic Train", "Solar Oven", "Newton"],
       three_suggestion: []
     };
   },
