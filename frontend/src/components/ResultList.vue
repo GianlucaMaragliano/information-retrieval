@@ -91,10 +91,11 @@ export default {
 <template>
 
   <h3 id="tmp" v-if="query"> Found {{results.length}} results for "{{query}}" with {{subjects.length}} different subjects</h3>
-  <button v-if="results.length > 0" id="button2" class="show-more-button" @click="changeMode()">
-    {{clustering ? 'Show per Experiment' : 'Show per Subject'}}
-  </button>
-
+  <div class="button-container">
+    <button v-if="results.length > 0" class="show-more-button" @click="changeMode()">
+      {{clustering ? 'Show per Experiment' : 'Show per Subject'}}
+    </button>
+  </div>
   <h3 v-if="counter > 0 && !this.clustering"> Showing {{counter}} most relevant</h3>
 
   <div id="scroll-to-top" @click="scrollToTop">
@@ -118,7 +119,7 @@ export default {
     <ul v-for="item in displayedResults" :key="item.id">
       <Document :document="item"></Document>
     </ul>
-    <div id="button">
+    <div class="button-container">
       <button v-if="results.length > 10" @click="showMoreResults" class="show-more-button">
         {{ showMore ? 'Show Less' : 'Show All' }}
       </button>
@@ -137,21 +138,11 @@ export default {
    margin-bottom: 15px;
  }
 
- #button {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
-   margin-left: -200px;
- }
-
- #button2 {
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   margin-left: 200px;
-   margin-bottom: 15px;
- }
+  .button-container {
+    display: flex;
+    align-items: center;
+    margin: 0 0 0 20%;
+  }
 
  .show-more-button {
    background-color: transparent;
@@ -161,6 +152,15 @@ export default {
    border-radius: 4px;
    cursor: pointer;
    width: 50%;
+   align-items: center;
+ }
+
+ .show-more-button:hover {
+   background-color: hsl(196, 76%, 39%);
+   color: white;
+   transition: 0.3s;
+   box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
+   transform: scale(1.05,1.05);
  }
 
  #scroll-to-top {

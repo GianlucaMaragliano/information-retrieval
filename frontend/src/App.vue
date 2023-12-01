@@ -46,7 +46,7 @@ export default {
     },
     generateSuggestion() {
       const shuffled = this.sample_queries.sort(() => 0.5 - Math.random());
-      this.three_suggestion = shuffled.slice(0, 3)
+      this.three_suggestion = shuffled.slice(0, 4)
     },
     async fetchSuggested(event) {
       let sugg_query = event.target.innerHTML
@@ -66,8 +66,10 @@ export default {
       <h1> Welcome to Science Hub!</h1>
       <h2> Here you can find science experiments for middle and high schools and much more! </h2>
       <h3> Start your search by typing your interest or have a look at the suggested topics. </h3>
-      <div v-for="query in this.three_suggestion" class="query-suggestion" @click="fetchSuggested($event)">
-        {{query}}
+      <div class="suggestion-container">
+        <div v-for="query in this.three_suggestion" class="query-suggestion" @click="fetchSuggested($event)">
+          {{query}}
+        </div>
       </div>
     </div>
 
@@ -104,6 +106,12 @@ img {
   cursor: pointer;
 }
 
+.suggestion-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 2% 2% 2% 2%;
+}
+
 .query-suggestion {
   background-color: transparent;
   color: hsl(196, 76%, 39%);
@@ -117,10 +125,15 @@ img {
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  flex: 1 0 50%;
 }
 
 .query-suggestion:hover {
-  background-color: black;
+  background-color: hsl(196, 76%, 39%);
+  color: white;
+  transition: 0.3s;
+  box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
+  transform: scale(1.05,1.05);
 }
 
 #welcome {
