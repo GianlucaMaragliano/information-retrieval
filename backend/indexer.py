@@ -84,9 +84,8 @@ docs_df = docs_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
 
 docno = ['d'+ str(i) for i in range(docs_df.shape[0])]
 docs_df['docno'] = docno
+
 docs_df['text'] = docs_df['title'] + ' ' + docs_df['subject'] + ' ' + docs_df['explanation']
-
-
 
 # CLUSTERING
 
@@ -127,7 +126,11 @@ cluster_df = pd.concat([cluster_df, missing_df], ignore_index=True)
 empty_subject_mask = docs_df['subject'] == ''
 docs_df.loc[empty_subject_mask, 'subject'] = docs_df.loc[empty_subject_mask, 'cluster'].map(cluster_df.set_index('cluster')['subject'])
 
+
+
 # INDEXING
+docs_df['text'] = docs_df['title'] + ' ' + docs_df['subject'] + ' ' + docs_df['explanation']
+
 exp_title = docs_df.title.values
 exp_link = docs_df.link.values
 exp_desc = docs_df.description.values
