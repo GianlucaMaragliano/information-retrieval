@@ -9,7 +9,7 @@ export default {
     return {
       sample_queries: ["Rocket", "Javascript Game", "Explosive Car", "Mushrooms Bridge", "Acid Water",
         "Volcano Eruption", "Homemade Yogurt", "Phone Radiations", "Colored Fire", "Machine Learning", "Football",
-        "Magnetic Train", "Solar Oven", "Newton", "virtual reality gaming", "Wireless Charging Technology", "Origami Engineering",
+        "Magnetic Train", "Solar Oven", "Newton", "Wireless Charging Technology", "Origami Engineering",
         "Cognitive Psychology", "Bioluminescent Organisms"],
       three_suggestion: []
     };
